@@ -16,6 +16,10 @@ func (cfg apiConfig) ensureAssetsDir() error {
 	return nil
 }
 
+func isImage(mediaType string) bool {
+	return mediaType == "image/jpeg" || mediaType == "image/png"
+}
+
 func getAssetPath(videoID uuid.UUID, mediaType string) string {
 	ext := mediaTypeToExt(mediaType)
 	return fmt.Sprintf("%s%s", videoID, ext)
