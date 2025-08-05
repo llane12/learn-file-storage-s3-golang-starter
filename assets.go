@@ -1,12 +1,12 @@
 package main
 
 import (
+	"crypto/rand"
+	"encoding/base64"
 	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
-
-	"github.com/google/uuid"
 )
 
 func (cfg apiConfig) ensureAssetsDir() error {
@@ -20,9 +20,15 @@ func isImage(mediaType string) bool {
 	return mediaType == "image/jpeg" || mediaType == "image/png"
 }
 
-func getAssetPath(videoID uuid.UUID, mediaType string) string {
+func getRandomAssetId() string {
+	randBytes := make([]byte, 32)
+	rand.Read(randBytes)
+	return base64.RawURLEncoding.EncodeToString(randBytes)
+}
+
+func getAssetPath(assetId, mediaType string) string {
 	ext := mediaTypeToExt(mediaType)
-	return fmt.Sprintf("%s%s", videoID, ext)
+	return fmt.Sprintf("%s%s", assetId, ext)
 }
 
 func (cfg apiConfig) getAssetDiskPath(assetPath string) string {
