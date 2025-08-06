@@ -68,7 +68,7 @@ func (cfg *apiConfig) handlerUploadThumbnail(w http.ResponseWriter, r *http.Requ
 		respondWithError(w, http.StatusBadRequest, "Invalid Content-Type header", err)
 		return
 	}
-	if !isImage(mediaType) {
+	if !isValidThumbnail(mediaType) {
 		respondWithError(w, http.StatusBadRequest, "Invalid file type", nil)
 		return
 	}
@@ -90,7 +90,7 @@ func (cfg *apiConfig) handlerUploadThumbnail(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
-	thumbnailUrl := cfg.getAssetURL(assetPath)
+	thumbnailUrl := cfg.getAssetUrlLocal(assetPath)
 	video.ThumbnailURL = &thumbnailUrl
 
 	err = cfg.db.UpdateVideo(video)

@@ -16,8 +16,12 @@ func (cfg apiConfig) ensureAssetsDir() error {
 	return nil
 }
 
-func isImage(mediaType string) bool {
+func isValidThumbnail(mediaType string) bool {
 	return mediaType == "image/jpeg" || mediaType == "image/png"
+}
+
+func isValidVideo(mediaType string) bool {
+	return mediaType == "video/mp4"
 }
 
 func getRandomAssetId() string {
@@ -35,8 +39,14 @@ func (cfg apiConfig) getAssetDiskPath(assetPath string) string {
 	return filepath.Join(cfg.assetsRoot, assetPath)
 }
 
-func (cfg apiConfig) getAssetURL(assetPath string) string {
+func (cfg apiConfig) getAssetUrlLocal(assetPath string) string {
 	return fmt.Sprintf("http://localhost:%s/assets/%s", cfg.port, assetPath)
+}
+
+func (cfg apiConfig) getAssetUrlS3(assetId string) string {
+	// https://<bucket-name>.s3.<region>.amazonaws.com/<key>
+	url := "https://%s.s3.%s.amazonaws.com/%s"
+	return fmt.Sprintf(url, cfg.s3Bucket, cfg.s3Region, assetId)
 }
 
 func mediaTypeToExt(mediaType string) string {
