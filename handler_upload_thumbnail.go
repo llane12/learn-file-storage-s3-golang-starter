@@ -7,7 +7,8 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/bootdotdev/learn-file-storage-s3-golang-starter/internal/auth"
+	"tubely/internal/auth"
+
 	"github.com/google/uuid"
 )
 
