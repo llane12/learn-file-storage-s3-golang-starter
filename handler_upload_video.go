@@ -114,8 +114,23 @@ func (cfg *apiConfig) handlerUploadVideo(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
+	// Get aspect ratio of video file
+	ratio, err := getVideoAspectRatio(tempFile.Name())
+	if err != nil {
+		respondWithError(w, http.StatusInternalServerError, "Error reading temporary file", err)
+		return
+	}
+	prefix := "other"
+	switch ratio {
+	case "16:9":
+		prefix = "landscape"
+	case "9:16":
+		prefix = "portrait"
+	}
+
 	// Upload temp file to S3
 	assetId := getRandomAssetId()
+	assetId = fmt.Sprintf("%s/%s", prefix, assetId)
 	assetPath := getAssetPath(assetId, mediaType)
 
 	putObjectParams := s3.PutObjectInput{
