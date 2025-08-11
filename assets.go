@@ -43,10 +43,9 @@ func (cfg apiConfig) getAssetUrlLocal(assetPath string) string {
 	return fmt.Sprintf("http://localhost:%s/assets/%s", cfg.port, assetPath)
 }
 
-func (cfg apiConfig) getAssetUrlS3(assetId string) string {
-	// https://<bucket-name>.s3.<region>.amazonaws.com/<key>
-	url := "https://%s.s3.%s.amazonaws.com/%s"
-	return fmt.Sprintf(url, cfg.s3Bucket, cfg.s3Region, assetId)
+func (cfg apiConfig) getVideoUrl(assetId string) string {
+	// e.g. tube-private-12345,portrait/vertical.mp4
+	return fmt.Sprintf("%s,%s", cfg.s3Bucket, assetId)
 }
 
 func mediaTypeToExt(mediaType string) string {

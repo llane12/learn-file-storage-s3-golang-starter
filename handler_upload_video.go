@@ -159,13 +159,20 @@ func (cfg *apiConfig) handlerUploadVideo(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	// Update video URL
-	videoUrl := cfg.getAssetUrlS3(assetPath)
+	// Update video URL in database
+	videoUrl := cfg.getVideoUrl(assetPath)
 	video.VideoURL = &videoUrl
 
 	err = cfg.db.UpdateVideo(video)
 	if err != nil {
 		respondWithError(w, http.StatusInternalServerError, "Error updating video record", err)
+		return
+	}
+
+	// Get presigned video URL
+	video, err = cfg.dbVideoToSignedVideo(video, r.Context())
+	if err != nil {
+		respondWithError(w, http.StatusInternalServerError, "Error generating presigned", err)
 		return
 	}
 
