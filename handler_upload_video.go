@@ -169,12 +169,5 @@ func (cfg *apiConfig) handlerUploadVideo(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	// Get presigned video URL
-	video, err = cfg.dbVideoToSignedVideo(video, r.Context())
-	if err != nil {
-		respondWithError(w, http.StatusInternalServerError, "Error generating presigned", err)
-		return
-	}
-
 	respondWithJSON(w, http.StatusOK, video)
 }

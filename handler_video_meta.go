@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 
 	"tubely/internal/auth"
@@ -97,12 +96,6 @@ func (cfg *apiConfig) handlerVideoGet(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	video, err = cfg.dbVideoToSignedVideo(video, r.Context())
-	if err != nil {
-		respondWithError(w, http.StatusInternalServerError, "Error generating presigned URL", err)
-		return
-	}
-
 	respondWithJSON(w, http.StatusOK, video)
 }
 
@@ -122,15 +115,6 @@ func (cfg *apiConfig) handlerVideosRetrieve(w http.ResponseWriter, r *http.Reque
 	if err != nil {
 		respondWithError(w, http.StatusInternalServerError, "Couldn't retrieve videos", err)
 		return
-	}
-
-	for i, video := range videos {
-		vid, err := cfg.dbVideoToSignedVideo(video, r.Context())
-		if err != nil {
-			respondWithError(w, http.StatusInternalServerError, fmt.Sprintf("Error generating presigned URL for video %v", video.ID), err)
-			return
-		}
-		videos[i] = vid
 	}
 
 	respondWithJSON(w, http.StatusOK, videos)

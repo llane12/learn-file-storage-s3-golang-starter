@@ -44,8 +44,8 @@ func (cfg apiConfig) getAssetUrlLocal(assetPath string) string {
 }
 
 func (cfg apiConfig) getVideoUrl(assetId string) string {
-	// e.g. tube-private-12345,portrait/vertical.mp4
-	return fmt.Sprintf("%s,%s", cfg.s3Bucket, assetId)
+	// e.g. https://dkdi1medkine9a.cloudfront.net/landscape/5n4K7uoEJ-dffddffdfsdfsdf.mp4
+	return fmt.Sprintf("%s/%s", cfg.s3CfDistribution, assetId)
 }
 
 func mediaTypeToExt(mediaType string) string {
